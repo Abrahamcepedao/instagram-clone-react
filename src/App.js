@@ -68,7 +68,7 @@ function App() {
 
   // useEffect => Runs a piece of code based on a specific condition
   useEffect(() => {
-    db.collection('posts').onSnapshot(snapshot => {
+    db.collection('posts').orderBy('timestamp', 'desc').onSnapshot(snapshot => {
       setPosts(snapshot.docs.map(doc => ({
         id: doc.id,
         post: doc.data()
@@ -99,7 +99,6 @@ function App() {
 
   return (
     <div className="App">
-      <ImageUpload/>
       <Modal open={open} onClose={() => setOpen(false)}>
         <div style={modalStyle} className={classes.paper}>
           <form className="app__signup">
@@ -167,15 +166,16 @@ function App() {
           src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png"
           alt=""
         />
+        {user ? (
+          <Button onClick={() => auth.signOut()}>Log out</Button>
+        ) : (
+            <div className="app__container">
+              <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+              <Button onClick={() => setOpen(true)}>Sign Up</Button>
+            </div>
+          )}
       </div>
-      {user ? (
-        <Button onClick={() => auth.signOut()}>Log out</Button>
-      ): (
-        <div className="app__container">
-            <Button onClick={() => setOpenSignIn(true)}>Sign Up</Button>
-            <Button onClick={() => setOpen(true)}>Sign Up</Button>
-        </div>
-      )}
+      
       
 
       {/* Posts */}
@@ -187,6 +187,11 @@ function App() {
           imageUrl={post.imageUrl}
         />
       ))}
+      {user?.displayName ? (
+        <ImageUpload username={user.displayName} />
+      ) : (
+          <h3>Sorry you need to login</h3>
+        )}
     </div>
   );
 }
