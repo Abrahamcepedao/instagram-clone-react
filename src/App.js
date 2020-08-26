@@ -8,7 +8,7 @@ import Modal from "@material-ui/core/Modal";
 import { Button } from '@material-ui/core';
 import { Input } from "@material-ui/core";
 import ImageUpload from './ImageUpload';
-
+import InstagramEmbed from "react-instagram-embed";
 
 function getModalStyle() {
   const top = 50;
@@ -109,25 +109,25 @@ function App() {
                 alt=""
               />
             </center>
-              <Input
-                placeholder="username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              ></Input>
-              <Input
-                placeholder="email"
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              ></Input>
-              <Input
-                placeholder="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              ></Input>
-              <Button onClick={signUp}>signUp</Button>
+            <Input
+              placeholder="username"
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            ></Input>
+            <Input
+              placeholder="email"
+              type="text"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            ></Input>
+            <Input
+              placeholder="password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            ></Input>
+            <Button onClick={signUp}>signUp</Button>
           </form>
         </div>
       </Modal>
@@ -152,7 +152,6 @@ function App() {
               placeholder="password"
               type="password"
               value={password}
-
               onChange={(e) => setPassword(e.target.value)}
             ></Input>
             <Button onClick={signIn}>sign In</Button>
@@ -169,29 +168,46 @@ function App() {
         {user ? (
           <Button onClick={() => auth.signOut()}>Log out</Button>
         ) : (
-            <div className="app__container">
-              <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
-              <Button onClick={() => setOpen(true)}>Sign Up</Button>
-            </div>
-          )}
+          <div className="app__container">
+            <Button onClick={() => setOpenSignIn(true)}>Sign In</Button>
+            <Button onClick={() => setOpen(true)}>Sign Up</Button>
+          </div>
+        )}
       </div>
-      
-      
 
       {/* Posts */}
-      {posts.map(({ id, post }) => (
-        <Post
-          key={id}
-          username={post.username}
-          caption={post.caption}
-          imageUrl={post.imageUrl}
-        />
-      ))}
+      <div className="app__posts">
+        <div className="app__postsLeft">
+          {posts.map(({ id, post }) => (
+            <Post
+              key={id}
+              username={post.username}
+              caption={post.caption}
+              imageUrl={post.imageUrl}
+            />
+          ))}
+        </div>
+        <div className="app__postsRight">
+          <InstagramEmbed
+            url="https://www.instagram.com/p/Zw9o4/"
+            maxWidth={320}
+            hideCaption={false}
+            containerTagName="div"
+            protocol=""
+            injectScript
+            onLoading={() => {}}
+            onSuccess={() => {}}
+            onAfterRender={() => {}}
+            onFailure={() => {}}
+          />
+        </div>
+      </div>
+
       {user?.displayName ? (
         <ImageUpload username={user.displayName} />
       ) : (
-          <h3>Sorry you need to login</h3>
-        )}
+        <h3>Sorry you need to login</h3>
+      )}
     </div>
   );
 }
